@@ -12,7 +12,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      data: [],
       description: null,
       amount: null,
       transaction: null,
@@ -94,7 +94,7 @@ class Home extends React.Component {
     /* 
     TEMP FIELDS
     */
-    formData.append("desciption", description);
+    formData.append("description", description);
     formData.append("amount", amount);
     formData.append("transaction", transaction);
 
@@ -130,7 +130,9 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.callBackendAPI()
-      .then((res) => this.setState({ data: res.express }))
+      .then((res) => {
+        this.setState({ data: res });
+      })
       .catch((err) => console.log(err));
   }
 
@@ -153,18 +155,16 @@ class Home extends React.Component {
   }
 
   render() {
-    let { addTransaction } = this.state;
+    let { addTransaction,data } = this.state;
     return (
       <div>
         {addTransaction === false ? (
           <React.Fragment>
             <div>
               <div className='ag-theme-alpine' style={{ height: "600px", width: "1000px" }}>
-               
-
                 <AgGridReact
                   columnDefs={this.state.columnDefs}
-                  rowData={this.state.rowData}
+                  rowData={data.length>0?data:this.state.rowData}
                   rowSelection='single'
                   onGridReady={(params) => (this.gridApi = params.api)}
                   pagination={true}
@@ -177,7 +177,7 @@ class Home extends React.Component {
             <Button
               type='button'
               className='btn btn-large btn-success custom_dealer_filter_button'
-              onClick={(e)=>this.handleAddTransaction(e)}
+              onClick={(e) => this.handleAddTransaction(e)}
             >
               Add Transaction
             </Button>
