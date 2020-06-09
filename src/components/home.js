@@ -47,6 +47,33 @@ class Home extends React.Component {
     this.handleAddTransaction = this.handleAddTransaction.bind(this);
   }
 
+  componentDidUpdate(prevProps,prevState){
+    if(prevState.addTransaction!=this.state.addTransaction){
+      if(this.state.addTransaction){
+        let response = await axios({
+          method: "POST",
+          url: `/v1/transactions/get-transaction`,
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+            Accept: "application/json; charset=utf-8",
+          },
+          data: json,
+        });
+        console.log("============Status========================");
+        console.log(response.status);
+        console.log("=============Status=======================");
+        if (response.status !== 200) {
+          throw Error(response.message);
+        } else {
+          console.log("INside ");
+          this.setState({ addTransaction: false }, () => {
+            console.log("sUCCESSFULLY UPDATED");
+          });
+        }
+      }
+    }
+  }
+
   handleChange = async (event) => {
     event.preventDefault();
     const { name, value } = event.target;
