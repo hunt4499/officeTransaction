@@ -47,7 +47,7 @@ class Home extends React.Component {
     this.handleAddTransaction = this.handleAddTransaction.bind(this);
   }
 
-  componentDidUpdate(prevProps,prevState){
+  async componentDidUpdate(prevProps,prevState){
     if(prevState.addTransaction!=this.state.addTransaction){
       if(this.state.addTransaction){
         let response = await axios({
